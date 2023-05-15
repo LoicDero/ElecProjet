@@ -17,8 +17,8 @@ digit_patterns = {
 }
 
 # Définition des broches pour les deux afficheurs 7 segments
-segments_1 = []
-segments_2 = []
+afficheur_Dixaines = []
+afficheur_Unitees = []
 
 segment_0 = machine.Pin(8, machine.Pin.OUT)
 segment_1 = machine.Pin(9, machine.Pin.OUT)

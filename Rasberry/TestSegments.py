@@ -1,20 +1,6 @@
 import machine
 import time
 
-# Définition des chiffres à afficher (en binaire)
-digit_patterns = {
-    0: [0, 0, 0, 0, 0, 0, 1],
-    1: [1, 0, 0, 1, 1, 1, 1],
-    2: [0, 0, 1, 0, 0, 1, 0],
-    3: [0, 0, 0, 0, 1, 1, 0],
-    4: [1, 0, 0, 1, 1, 0, 0],
-    5: [0, 1, 0, 0, 1, 0, 0],
-    6: [0, 1, 0, 0, 0, 0, 0],
-    7: [0, 0, 0, 1, 1, 1, 1],
-    8: [0, 0, 0, 0, 0, 0, 0],
-    9: [0, 0, 0, 0, 1, 0, 0]
-}
-
 # Définition des broches pour les deux afficheurs 7 segments
 Afficheur_Dixaines = [
     machine.Pin(8, machine.Pin.OUT),
@@ -37,14 +23,10 @@ Afficheur_Unitees = [
 ]
 
 # Fonction pour allumer un segment donné
-
-
 def allumer_segment(segment):
     segment.off()
 
 # Fonction pour éteindre un segment donné
-
-
 def eteindre_segment(segment):
     segment.on()
 
