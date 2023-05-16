@@ -6,23 +6,20 @@ import select
 
 
 poller = select.poll()
-poller.register(sys.stdin,1)
-
+poller.register(sys.stdin, 1)
 
 
 distance = 99
 
+
 def read_from_port():
-    usb = machine.pyb.USB_VCP()
-    usb.init()
-    if usb.any():
-        line = usb.readline()   
-        usb.close()
-    if line:
-        return (int)(line.decode('utf-8'))
-    else:
-        usb.close()
-        
+    if poller.poll(0):
+        line = sys.stdin.buffer.readline()
+        if line:
+            data = line.decode('utf-8')
+            return int(data)
+
+
 
 # Définition des chiffres à afficher (en binaire)
 digit_patterns = {
@@ -102,7 +99,7 @@ def afficher_chiffre(digit, segments):
 # Boucle principale pour mesurer la distance et afficher les deux premiers chiffres
 while True:
     # Mesure la distance
-    
+
     get_distance()
 
     segment_0.on()
@@ -120,12 +117,20 @@ while True:
     dist = str(distance)
 
     # Récupère les deux premiers chiffres de la distance
-    first_digit = dist[0]
-    second_digit = dist[1]
+
+    if distance < 10:
+        for segment in afficheur_Dixaines:
+            segment.on()
+        second_digit = dist[0]
+        afficher_chiffre(second_digit, afficheur_Unitees)
+    else :
+        first_digit = dist[0]
+        second_digit = dist[1]
+        afficher_chiffre(first_digit, afficheur_Dixaines)
+        afficher_chiffre(second_digit, afficheur_Unitees)
 
     # Affiche les chiffres sur les deux afficheurs 7 segments
-    afficher_chiffre(first_digit, afficheur_Dixaines)
-    afficher_chiffre(second_digit, afficheur_Unitees)
+
 
     # # Attend une seconde avant de mesurer à nouveau
     utime.sleep(0.5)
