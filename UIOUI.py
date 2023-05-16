@@ -8,18 +8,31 @@ import select
 poller = select.poll()
 poller.register(sys.stdin, 1)
 
-
+alarm = 250
 distance = 99
 
-
+# Fonction pour mesurer la distance avec la sonde HC-SR04
 def read_from_port():
     if poller.poll(0):
         line = sys.stdin.buffer.readline()
         if line:
             data = line.decode('utf-8')
-            return int(data)
+            return data
 
+# Fonction pour mesurer la distance avec la sonde HC-SR04
+def dechiffre():
+    global distance
+    global alarm
+  
+    data = read_from_port()
+    if data != None:
+        data_Array = data.split(',')
+        distance = int(data_Array[0])
+        alarm = int(data_Array[1])
 
+def alarme():
+    red_led.on()
+    green_led.off()
 
 # Définition des chiffres à afficher (en binaire)
 digit_patterns = {
@@ -70,20 +83,11 @@ green_led = machine.Pin(1, machine.Pin.OUT)
 red_led = machine.Pin(0, machine.Pin.OUT)
 
 red_led.off()
-green_led.off()
+green_led.on()
 
 # Définition de la broche pour la sonde HC-SR04
 trigger = machine.Pin(18, machine.Pin.OUT)
 echo = machine.Pin(19, machine.Pin.IN)
-
-
-# Fonction pour mesurer la distance avec la sonde HC-SR04
-def get_distance():
-    reading = read_from_port()
-    if reading != None:
-        global distance
-        distance = reading
-
 
 # Fonction pour afficher un chiffre sur un afficheur 7 segments
 def afficher_chiffre(digit, segments):
@@ -99,25 +103,25 @@ def afficher_chiffre(digit, segments):
 # Boucle principale pour mesurer la distance et afficher les deux premiers chiffres
 while True:
     # Mesure la distance
+    dechiffre()
 
-    get_distance()
+    if distance > alarm:
+        alarme()
+    else:
+        red_led.off()
+        green_led.on()
+
 
     segment_0.on()
     if distance > 99:
         dot_point.off()
 
-        # red_led.on()
-        # green_led.off()
     else:
         dot_point.on()
-
-        # green_led.on()
-        # red_led.off()
 
     dist = str(distance)
 
     # Récupère les deux premiers chiffres de la distance
-
     if distance < 10:
         for segment in afficheur_Dixaines:
             segment.on()
@@ -128,9 +132,6 @@ while True:
         second_digit = dist[1]
         afficher_chiffre(first_digit, afficheur_Dixaines)
         afficher_chiffre(second_digit, afficheur_Unitees)
-
-    # Affiche les chiffres sur les deux afficheurs 7 segments
-
 
     # # Attend une seconde avant de mesurer à nouveau
     utime.sleep(0.5)
