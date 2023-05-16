@@ -57,28 +57,28 @@ echo = machine.Pin(19, machine.Pin.IN)
 
 # Fonction pour mesurer la distance avec la sonde HC-SR04
 def get_distance():
-    # # envoi d'une impulsion de 10 µs sur la broche TRIG
-    # trigger.high()
-    # time.sleep_us(10)
-    # trigger.low()
+    # envoi d'une impulsion de 10 µs sur la broche TRIG
+    trigger.high()
+    time.sleep_us(10)
+    trigger.low()
 
-    # # attente de l'état haut sur la broche ECHO
-    # t1 = time.ticks_us()
-    # while echo.value() == 0:
-    #     t1 = time.ticks_us()
+    # attente de l'état haut sur la broche ECHO
+    t1 = time.ticks_us()
+    while echo.value() == 0:
+        t1 = time.ticks_us()
 
-    # # attente de l'état bas sur la broche ECHO
-    # t2 = time.ticks_us()
-    # while echo.value() == 1:
-    #     t2 = time.ticks_us()
+    # attente de l'état bas sur la broche ECHO
+    t2 = time.ticks_us()
+    while echo.value() == 1:
+        t2 = time.ticks_us()
 
-    # # calcul de la durée de l'impulsion
-    # duration = time.ticks_diff(t2, t1)
+    # calcul de la durée de l'impulsion
+    duration = time.ticks_diff(t2, t1)
 
-    # # conversion en distance (en cm)
-    # distance = duration / 58
+    # conversion en distance (en cm)
+    distance = duration / 58
 
-    return 88
+    return distance
 
 
 # Fonction pour afficher un chiffre sur un afficheur 7 segments

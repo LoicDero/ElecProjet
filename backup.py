@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-import math
 
 def update_distance_limit():
     limit = distance_limit_entry.get()
@@ -11,11 +10,11 @@ def update_distance_limit():
     except ValueError:
         messagebox.showerror("Erreur", "Veuillez entrer une valeur numérique pour la limite de distance.")
 
+
 def on_distance_change(event):
-    distance = int(distance_scale.get())  # Distance entière
+    distance = round(distance_scale.get(),1)  # Distance arrondie à l'unité (centimètres)
     distance_var.set(distance)  # Mise à jour de la variable de distance
-    print("distance 1", distance)
-    print("distance2", distance_var.get())
+    distance_text_label.config(text=f"{distance:.1f}")  # Mise à jour du texte de la distance
 
 # Création de la fenêtre principale
 window = tk.Tk()
@@ -24,7 +23,7 @@ window.minsize(400, 250)
 window.maxsize(400, 250)
 
 # Variable pour stocker la valeur de distance
-distance_var = tk.IntVar(value=1)  # Initialisation à 1 mètre
+distance_var = tk.IntVar(value=1.0)  # Initialisation à 1 mètre
 
 # Création des widgets
 title_label = ttk.Label(window, text="Distance :")
@@ -49,8 +48,8 @@ distance_var.set(100)  # Initialisation à 1 mètre
 
 ttk.Label(window, text="Distance :").pack()
 distance_text_label = ttk.Label(window, textvariable=distance_var, font=("Arial", 14, "bold"))
-distance_text_label.config(text="Distance : " + str(math.trunc(distance_var.get())) + " cm")
 distance_text_label.pack()
+
 
 # Appel de la fonction on_distance_change lorsque la jauge est déplacée
 distance_scale.bind("<B1-Motion>", on_distance_change)
